@@ -1,0 +1,34 @@
+CREATE TABLE ControlCambios (
+    id_cambio INT PRIMARY KEY,
+    usuario VARCHAR(50),
+    descripcion VARCHAR(100),
+    tablaAfectada VARCHAR(100),
+    fechaHora TIMESTAMP
+);
+
+CREATE OR REPLACE FUNCTION INSERT_Miembro()
+RETURNS TRIGGER 
+LANGUAGE PLPGSQL 
+AS $$
+BEGIN 
+	IF NEW.nombres is NULL
+
+✔️ Explicación clara:
+Esta tabla registra:
+
+idCambio → identificador único del evento
+
+usuario → quién realizó el cambio
+
+descripcion → qué realizó (insertó, actualizó, eliminó, consultó, etc.)
+
+tablaAfectada → en qué tabla lo hizo
+
+fechaHora → cuándo pasó el evento con fecha y hora
+
+INSERT INTO ControlCambios 
+(idCambio, usuario, descripcion, tablaAfectada, fechaHora)
+VALUES 
+('CAMB001', 'Christian', 'Insertó nuevo miembro', 'Miembro', NOW());
+
+

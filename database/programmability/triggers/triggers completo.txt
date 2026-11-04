@@ -1,0 +1,124 @@
+CREATE TABLE Bitacora (
+    idBitacora SERIAL PRIMARY KEY,
+    tabla VARCHAR(100),
+    accion VARCHAR(10),
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    usuario_bd VARCHAR(100),
+    datos_antes TEXT,
+    datos_despues TEXT
+);
+
+create trigger tg_bitacora_miembro
+after insert or update or delete on Miembro
+for each row
+execute function fn_bitacora();
+
+create trigger tg_bitacora_proveedor
+after insert or update or delete on Proveedor
+for each row
+ejecute function fn_bitacora();
+
+create trigger tg_bitacora_insumo
+after insert op update or delete on Insumo
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_maquinaria
+after insert op update or delete on Maquinaria
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_reservamaquinaria
+after insert op update or delete on ReservaMaquinaria
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_capacitacion
+after insert op update or delete on Capacitacion
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_InscripcionCapacitacion
+after insert op update or delete on InscripcionCapacitacion
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_Membresia
+after insert op update or delete on Membresia
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_PagoMembresia
+after insert op update or delete on PagoMembresia
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_Cultivo
+after insert op update or delete on Cultivo
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_MiembroCultivo
+after insert op update or delete on MiembroCultivo
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_Producto
+after insert op update or delete on Producto
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_EntidadExterna
+after insert op update or delete on EntidadExterna
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_Mandato
+after insert op update or delete on Mandato
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_Contrato
+after insert op update or delete on Contrato
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_Convenio
+after insert op update or delete on Convenio
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_Venta
+after insert op update or delete on Venta
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_DetalleVenta
+after insert op update or delete on DetalleVenta
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_Pago
+after insert op update or delete on Pago
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_Gasto
+after insert op update or delete on Gasto
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_Cargo
+after insert op update or delete on Cargo
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_DetallesMembresia
+after insert op update or delete on DetallesMembresia
+for each row
+ejecute funcion fn_bitacora();
+
+create trigger tg_bitacora_MembresiaInsumo
+after insert op update or delete on MembresiaInsumo
+for each row
+ejecute funcion fn_bitacora();

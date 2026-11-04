@@ -1,0 +1,243 @@
+CREATE TABLE Miembro (
+    idMiembro VARCHAR(40) PRIMARY KEY,
+    nombres VARCHAR(200),
+    apellidos VARCHAR(200),
+    cedula BIGINT UNIQUE,
+    telefono BIGINT,
+    direccion VARCHAR(300),
+    fechaIngreso DATE,
+    estado VARCHAR(40)
+);
+
+CREATE TABLE Proveedor (
+    idProveedor VARCHAR(40) PRIMARY KEY,
+    nombre VARCHAR(200),
+    telefono VARCHAR(40),
+    direccion VARCHAR(300),
+    email VARCHAR(200),
+    tipoProveedor VARCHAR(80)
+);
+
+CREATE TABLE Insumo (
+    idInsumo VARCHAR(40) PRIMARY KEY,
+    idProveedor VARCHAR(40),
+    nombre VARCHAR(200),
+    tipo VARCHAR(80),
+    unidad INTEGER,
+    stock INTEGER,
+    precio DECIMAL(10,2),
+    FOREIGN KEY (idProveedor) REFERENCES Proveedor(idProveedor)
+);
+
+CREATE TABLE Maquinaria (
+    idMaquinaria VARCHAR(40) PRIMARY KEY,
+    nombre VARCHAR(200),
+    tipo VARCHAR(80),
+    marca VARCHAR(80),
+    modelo VARCHAR(80),
+    descripcion TEXT,
+    capacidad INTEGER,
+    fechaAdquisicion DATE,
+    estado VARCHAR(80)
+);
+
+CREATE TABLE ReservaMaquinaria (
+    idReserva VARCHAR(40) PRIMARY KEY,
+    idMiembro VARCHAR(40),
+    idMaquinaria VARCHAR(40),
+    fechaInicio DATE,
+    fechaFin DATE,
+    motivoUso VARCHAR(200),
+    estadoReserva VARCHAR(80),
+    observaciones TEXT,
+    FOREIGN KEY (idMiembro) REFERENCES Miembro(idMiembro),
+    FOREIGN KEY (idMaquinaria) REFERENCES Maquinaria(idMaquinaria)
+);
+
+CREATE TABLE Capacitacion (
+    idCapacitacion VARCHAR(40) PRIMARY KEY,
+    nombre VARCHAR(200),
+    tema VARCHAR(200),
+    categoria VARCHAR(80),
+    fechaInicio DATE,
+    fechaFin DATE,
+    duracion DECIMAL(10,1),
+    modalidad VARCHAR(80),
+    lugar VARCHAR(200),
+    entidadOrganizadora VARCHAR(200),
+    cupoMaximo INTEGER,
+    descripcion TEXT
+);
+
+CREATE TABLE InscripcionCapacitacion (
+    idInscripcion VARCHAR(40) PRIMARY KEY,
+    idMiembro VARCHAR(40),
+    idCapacitacion VARCHAR(40),
+    fechaInscripcion DATE,
+    estadoInscripcion VARCHAR(80),
+    observaciones TEXT,
+    FOREIGN KEY (idMiembro) REFERENCES Miembro(idMiembro),
+    FOREIGN KEY (idCapacitacion) REFERENCES Capacitacion(idCapacitacion)
+);
+
+CREATE TABLE Membresia (
+    idMembresia VARCHAR(40) PRIMARY KEY,
+    idMiembro VARCHAR(40),
+    tipo VARCHAR(80),
+    costo DECIMAL(10,2),
+    fechaInicio DATE,
+    fechaFin DATE,
+    estado VARCHAR(80),
+    FOREIGN KEY (idMiembro) REFERENCES Miembro(idMiembro)
+);
+
+CREATE TABLE PagoMembresia (
+    idPago VARCHAR(40) PRIMARY KEY,
+    idMembresia VARCHAR(40),
+    fechaPago DATE,
+    monto DECIMAL(10,2),
+    metodo VARCHAR(80),
+    FOREIGN KEY (idMembresia) REFERENCES Membresia(idMembresia)
+);
+
+CREATE TABLE Cultivo (
+    idCultivo VARCHAR(40) PRIMARY KEY,
+    nombre VARCHAR(200),
+    areaSembrada DECIMAL(10,2),
+    fechaSiembra DATE,
+    fechaCosecha DATE
+);
+
+CREATE TABLE MiembroCultivo (
+    idMiembro VARCHAR(40),
+    idCultivo VARCHAR(40),
+    PRIMARY KEY (idMiembro, idCultivo),
+    FOREIGN KEY (idMiembro) REFERENCES Miembro(idMiembro),
+    FOREIGN KEY (idCultivo) REFERENCES Cultivo(idCultivo)
+);
+
+CREATE TABLE Producto (
+    idProducto VARCHAR(40) PRIMARY KEY,
+    idCultivo VARCHAR(40),
+    nombre VARCHAR(200),
+    tipo VARCHAR(200),
+    unidadMedida VARCHAR(80),
+    precioReferencial DECIMAL(10,2),
+    FOREIGN KEY (idCultivo) REFERENCES Cultivo(idCultivo)
+);
+
+CREATE TABLE EntidadExterna (
+    idEntidadExterna VARCHAR(40) PRIMARY KEY,
+    nombre VARCHAR(200),
+    tipo_entidad VARCHAR(80),
+    direccion VARCHAR(300),
+    telefono VARCHAR(40),
+    correo VARCHAR(200)
+);
+
+CREATE TABLE Mandato (
+    idMandato VARCHAR(40) PRIMARY KEY,
+    cargo VARCHAR(200),
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    estado_cargo VARCHAR(80)
+);
+
+CREATE TABLE Contrato (
+    idContrato VARCHAR(40) PRIMARY KEY,
+    idEntidadExterna VARCHAR(40),
+    idMandato VARCHAR(40),
+    fecha_firma DATE,
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    tipo_contrato VARCHAR(80),
+    descripcion TEXT,
+    monto_contrato DECIMAL(12,2),
+    FOREIGN KEY (idEntidadExterna) REFERENCES EntidadExterna(idEntidadExterna),
+    FOREIGN KEY (idMandato) REFERENCES Mandato(idMandato)
+);
+
+CREATE TABLE Convenio (
+    idConvenio VARCHAR(40) PRIMARY KEY,
+    idEntidadExterna VARCHAR(40),
+    nombre_convenio VARCHAR(200),
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    descripcion TEXT,
+    estado VARCHAR(80),
+    FOREIGN KEY (idEntidadExterna) REFERENCES EntidadExterna(idEntidadExterna)
+);
+
+CREATE TABLE Venta (
+    idVenta VARCHAR(40) PRIMARY KEY,
+    idContrato VARCHAR(40),
+    fechaVenta DATE,
+    total DECIMAL(12,2),
+    estado VARCHAR(80),
+    observaciones TEXT,
+    FOREIGN KEY (idContrato) REFERENCES Contrato(idContrato)
+);
+
+CREATE TABLE DetalleVenta (
+    idProducto VARCHAR(40),
+    idVenta VARCHAR(40),
+    cantidad DECIMAL(10,2),
+    precioUnitario DECIMAL(10,2),
+    subtotal DECIMAL(12,2),
+    PRIMARY KEY (idProducto, idVenta),
+    FOREIGN KEY (idProducto) REFERENCES Producto(idProducto),
+    FOREIGN KEY (idVenta) REFERENCES Venta(idVenta)
+);
+
+CREATE TABLE Pago (
+    idPago VARCHAR(40) PRIMARY KEY,
+    idVenta VARCHAR(40),
+    cuotas INTEGER,
+    fechaPago DATE,
+    monto DECIMAL(12,2),
+    metodoPago VARCHAR(80),
+    estado VARCHAR(80),
+    FOREIGN KEY (idVenta) REFERENCES Venta(idVenta)
+);
+
+CREATE TABLE Gasto (
+    idGasto VARCHAR(40) PRIMARY KEY,
+    idMandato VARCHAR(40),
+    fecha_gasto DATE,
+    tipo_gasto VARCHAR(80),
+    descripcion TEXT,
+    monto DECIMAL(12,2),
+    comprobante TEXT,
+    FOREIGN KEY (idMandato) REFERENCES Mandato(idMandato)
+);
+
+CREATE TABLE Cargo (
+    idCargo VARCHAR(40) PRIMARY KEY,
+    idMiembro VARCHAR(40),
+    idMandato VARCHAR(40),
+    nombreCargo VARCHAR(200),
+    descripcion TEXT,
+    duracion DECIMAL(10,2),
+    FOREIGN KEY (idMiembro) REFERENCES Miembro(idMiembro),
+    FOREIGN KEY (idMandato) REFERENCES Mandato(idMandato)
+);
+
+CREATE TABLE DetallesMembresia (
+    idMembresia VARCHAR(40),
+    idMaquinaria VARCHAR(40),
+    idCapacitacion VARCHAR(40),
+    PRIMARY KEY (idMembresia, idMaquinaria, idCapacitacion),
+    FOREIGN KEY (idMembresia) REFERENCES Membresia(idMembresia),
+    FOREIGN KEY (idMaquinaria) REFERENCES Maquinaria(idMaquinaria),
+    FOREIGN KEY (idCapacitacion) REFERENCES Capacitacion(idCapacitacion)
+);
+
+CREATE TABLE MembresiaInsumo (
+    idMembresia VARCHAR(40),
+    idInsumo VARCHAR(40),
+    fechaEntrega DATE,
+    cantidadEntregada DECIMAL(10,2),
+    PRIMARY KEY (idMembresia, idInsumo, fechaEntrega),
+    FOREIGN KEY (idMembresia) REFERENCES Membresia(idMembresia),
+    FOREIGN KEY (idInsumo) REFERENCES Insumo(idInsumo)
+);
